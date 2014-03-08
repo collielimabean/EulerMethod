@@ -1,5 +1,8 @@
 package euler;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class SimpleEulerMethod 
 {
     public static double EPSILON = 1e-4; 
@@ -8,8 +11,9 @@ public class SimpleEulerMethod
     protected double current;
     protected double end;
     protected double initial;
-    
     protected Point point;
+    
+    private List<Point> data;
     
     public SimpleEulerMethod(double stepSize, Point initialPoint, double endPoint)
     {
@@ -20,6 +24,8 @@ public class SimpleEulerMethod
         
         current = initialPoint.getX();
         initial = initialPoint.getY();
+        
+        data = new ArrayList<Point>();
     }
     
     public static void setEpsilon(double newEpsilon)
@@ -29,18 +35,11 @@ public class SimpleEulerMethod
     
     public double slopeFunction(Point point)
     {
-        //TODO will be dynamic, amirite?
-        return (point.getX() + point.getY());
+        return (point.getY() * point.getY());
     }
     
-    public final double getApproximation()
+    public final List<Point> getApproximation()
     {
-        if(!isEndReachable())
-            throw new IllegalArgumentException(); //TODO Handle this elegantly
-        
-        if(current == end)
-            return initial;
-        
         double approx = point.getY();
         
         while(Math.abs(current - end) >= EPSILON)
@@ -49,10 +48,11 @@ public class SimpleEulerMethod
             
             current += step;
             point = new Point(current, approx);
-            System.out.println("Current: " + current + " | Value: " + approx);
+            
+            data.add(new Point(current, approx));
         }
         
-        return approx;
+        return data;
     }
     
     protected double approximate(double previousEstimate)
@@ -60,28 +60,6 @@ public class SimpleEulerMethod
         previousEstimate += step * slopeFunction(point);
         
         return previousEstimate;
-    }
-    
-    private boolean isEndReachable()
-    {
-        int endSign = (int) Math.signum(end - current);
-        int stepSign = (int) Math.signum(step);
-        
-        if(endSign != stepSign)
-            return false;
-        
-        if(endSign == 0 && stepSign == 0)
-            return true;
-        
-        double diff = ((end - current) / step) % 1;
-        
-        if((diff > 0.5) && (1 - diff < EPSILON))
-            return true;
-        
-        if((diff < 0.5) && (diff <= EPSILON))
-            return true;
-        
-        return false;
     }
     
 }

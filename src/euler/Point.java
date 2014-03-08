@@ -1,5 +1,4 @@
 package euler;
-
 public class Point 
 {
     
@@ -30,5 +29,10 @@ public class Point
     public void setY(double yValue)
     {
         y = yValue;
+    }
+    
+    public String toString()
+    {
+        return x + "," + y;
     }
 }
