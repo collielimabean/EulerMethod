@@ -1,5 +1,7 @@
 package euler;
 
+import parser.math.Point;
+
 public class TrapezoidalEulerMethod extends SimpleEulerMethod 
 {
 

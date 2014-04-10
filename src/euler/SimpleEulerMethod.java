@@ -3,6 +3,8 @@ package euler;
 import java.util.List;
 import java.util.ArrayList;
 
+import parser.math.Point;
+
 public class SimpleEulerMethod 
 {
     public static double EPSILON = 1e-4; 
