@@ -3,12 +3,14 @@ package euler;
 import java.util.List;
 import java.util.ArrayList;
 
-import parser.math.Point;
+import util.Expression;
+import util.Point;
 
 public class SimpleEulerMethod 
 {
     public static double EPSILON = 1e-4; 
     
+    protected Expression diffeq;
     protected double step;
     protected double current;
     protected double end;
@@ -17,8 +19,9 @@ public class SimpleEulerMethod
     
     private List<Point> data;
     
-    public SimpleEulerMethod(double stepSize, Point initialPoint, double endPoint)
+    public SimpleEulerMethod(Expression equation, double stepSize, Point initialPoint, double endPoint)
     {
+        diffeq = equation;
         step = stepSize;
         end = endPoint;
         
@@ -30,21 +33,21 @@ public class SimpleEulerMethod
         data = new ArrayList<Point>();
     }
     
-    public static void setEpsilon(double newEpsilon)
+    public final Expression getEquation()
     {
-        EPSILON = newEpsilon;
+        return diffeq;
     }
     
-    public double slopeFunction(Point point)
+    public final void setDifferentialEquation(Expression exp)
     {
-        return (point.getY() * point.getY());
+        diffeq = exp;
     }
     
     public final List<Point> getApproximation()
     {
         double approx = point.getY();
         
-        while(Math.abs(current - end) >= EPSILON)
+        while(Math.abs(current - end) - EPSILON >= 0)
         {
             approx = approximate(approx);
             
@@ -59,7 +62,7 @@ public class SimpleEulerMethod
     
     protected double approximate(double previousEstimate)
     {
-        previousEstimate += step * slopeFunction(point);
+        previousEstimate += step * diffeq.evaluate(point);
         
         return previousEstimate;
     }
